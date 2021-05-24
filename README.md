@@ -1,13 +1,18 @@
 # OpenVPN for Docker
 
-**the original project - [jpetazzo/dockvpn](https://github.com/jpetazzo/dockvpn)** and it has its own [automatic build on dockerhub](https://hub.docker.com/r/jpetazzo/dockvpn/). 
+**the original project - [jpetazzo/dockvpn](https://github.com/jpetazzo/dockvpn)** and it has its own [automatic build on dockerhub](https://hub.docker.com/r/jpetazzo/dockvpn/).
 
- 
+
 Quick instructions:
 
 ```bash
-CID=$(docker run -d --privileged -p 1194:1194/udp -p 443:443/tcp umputun/dockvpn)
-docker run -t -i -p 8080:8080 --volumes-from $CID umputun/dockvpn serveconfig
+CID=$(docker run -d --privileged -p 1194:1194/udp -p 443:443/tcp -e "NO_LOGS_PLEASE=1" --log-driver none umputun/dockvpn)
+docker run -t -i -p 8080:8080 -e "NO_LOGS_PLEASE=1" --log-driver none --volumes-from $CID umputun/dockvpn serveconfig
+```
+
+Download file with `curl`:
+```bash
+curl -k https://[SERVER_IP]:8080/ > ~/openvpn.ovpn
 ```
 
 Now download the file located at the indicated URL. You will get a
