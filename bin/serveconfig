@@ -13,7 +13,7 @@ while ! [ -f client.http ]; do
 done
 
 LOGFILE_HTTP=http8080.log
-[ -z "$NO_LOGS_PLEASE" ] || {
+[ -z "$DISABLE_LOGS" ] || {
     LOGFILE_HTTP=/dev/null
 }
 

@@ -111,7 +111,7 @@ touch tcp443.log udp1194.log http8080.log
 
 LOGFILE_TCP=tcp443.log
 LOGFILE_UDP=udp1194.log
-[ -z "$NO_LOGS_PLEASE" ] || {
+[ -z "$DISABLE_LOGS" ] || {
     LOGFILE_TCP=/dev/null
     LOGFILE_UDP=/dev/null
 }

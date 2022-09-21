@@ -6,8 +6,15 @@
 Quick instructions:
 
 ```bash
-CID=$(docker run -d --privileged -p 1194:1194/udp -p 443:443/tcp -e "NO_LOGS_PLEASE=1" --log-driver none umputun/dockvpn)
-docker run -t -i -p 8080:8080 -e "NO_LOGS_PLEASE=1" --log-driver none --volumes-from $CID umputun/dockvpn serveconfig
+CID=$(docker run -d --privileged -p 1194:1194/udp -p 443:443/tcp umputun/dockvpn)
+docker run -t -i -p 8080:8080 --volumes-from $CID umputun/dockvpn serveconfig
+```
+
+Or run without logs:
+
+```bash
+CID=$(docker run -d --privileged -p 1194:1194/udp -p 443:443/tcp -e "DISABLE_LOGS=1" --log-driver none umputun/dockvpn)
+docker run -t -i -p 8080:8080 -e "DISABLE_LOGS=1" --log-driver none --volumes-from $CID umputun/dockvpn serveconfig
 ```
 
 Download file with `curl`:
