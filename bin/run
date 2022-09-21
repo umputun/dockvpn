@@ -10,7 +10,7 @@ cd /etc/openvpn
 # This file tells `serveconfig` that there is a config there
 touch placeholder
 [ -f dh.pem ] ||
-    openssl dhparam -out dh.pem 1024
+    openssl dhparam -out dh.pem 2048
 [ -f key.pem ] ||
     openssl genrsa -out key.pem 2048
 chmod 600 key.pem
@@ -21,6 +21,7 @@ chmod 600 key.pem
 
 [ -f tcp443.conf ] || cat >tcp443.conf <<EOF
 server 192.168.255.0 255.255.255.128
+cipher AES-256-CBC
 verb 3
 duplicate-cn
 key key.pem
@@ -41,6 +42,7 @@ EOF
 
 [ -f udp1194.conf ] || cat >udp1194.conf <<EOF
 server 192.168.255.128 255.255.255.128
+cipher AES-256-CBC
 verb 3
 duplicate-cn
 key key.pem
@@ -68,6 +70,7 @@ MY_IP_ADDR=$(curl -s http://myip.enix.org/REMOTE_ADDR)
 
 [ -f client.ovpn ] || cat >client.ovpn <<EOF
 client
+cipher AES-256-CBC
 nobind
 dev tun
 redirect-gateway def1
