@@ -12,8 +12,13 @@ while ! [ -f client.http ]; do
     sleep 3
 done
 
+LOGFILE_HTTP=http8080.log
+[ -z "$DISABLE_LOGS" ] || {
+    LOGFILE_HTTP=/dev/null
+}
+
 echo "https://$(curl -s http://myip.enix.org/REMOTE_ADDR):8080/"
 socat -d -d \
     OPENSSL-LISTEN:8080,fork,reuseaddr,key=key.pem,certificate=cert.pem,verify=0 \
     EXEC:'cat client.http' \
-    2>> http8080.log
+    2>> "$LOGFILE_HTTP"

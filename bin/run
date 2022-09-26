@@ -108,6 +108,15 @@ EOF
 iptables -t nat -A POSTROUTING -s 192.168.255.0/24 -o eth0 -j MASQUERADE
 
 touch tcp443.log udp1194.log http8080.log
-while true ; do openvpn tcp443.conf ; done >> tcp443.log &
-while true ; do openvpn udp1194.conf ; done >> udp1194.log &
+
+LOGFILE_TCP=tcp443.log
+LOGFILE_UDP=udp1194.log
+[ -z "$DISABLE_LOGS" ] || {
+    LOGFILE_TCP=/dev/null
+    LOGFILE_UDP=/dev/null
+}
+
+while true ; do openvpn tcp443.conf ; done >> "$LOGFILE_TCP" &
+while true ; do openvpn udp1194.conf ; done >> "$LOGFILE_UDP" &
+
 tail -F *.log
