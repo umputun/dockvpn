@@ -84,9 +84,6 @@ redirect-gateway def1
 <ca>
 `cat cert.pem`
 </ca>
-<dh>
-`cat dh.pem`
-</dh>
 
 <connection>
 remote $MY_IP_ADDR 1194 udp
