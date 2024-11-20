@@ -21,19 +21,21 @@ chmod 600 key.pem
 
 [ -f tcp443.conf ] || cat >tcp443.conf <<EOF
 server 192.168.255.0 255.255.255.128
+ifconfig-pool-persist ipp.txt
+push "route 192.168.1.0 255.255.255.0"  # Route to the home network (NAS network)
+push "redirect-gateway def1"            # Push default route to clients (for mobile clients)
+client-to-client  # Allows clients to communicate with each other (e.g., mobiles and NAS)
 cipher AES-256-CBC
 verb 3
 duplicate-cn
 key key.pem
 ca cert.pem
 cert cert.pem
-dh dh.pem
 keepalive 10 60
 persist-key
 persist-tun
 push "dhcp-option DNS 8.8.8.8"
 push "dhcp-option DNS 8.8.4.4"
-
 proto tcp-server
 port 443
 dev tun443
@@ -42,13 +44,16 @@ EOF
 
 [ -f udp1194.conf ] || cat >udp1194.conf <<EOF
 server 192.168.255.128 255.255.255.128
+ifconfig-pool-persist ipp.txt
+push "route 192.168.1.0 255.255.255.0"  # Route to the home network (NAS network)
+push "redirect-gateway def1"            # Push default route to clients (for mobile clients)
+client-to-client  # Allows clients to communicate with each other (e.g., mobiles and NAS)
 cipher AES-256-CBC
 verb 3
 duplicate-cn
 key key.pem
 ca cert.pem
 cert cert.pem
-dh dh.pem
 keepalive 10 60
 persist-key
 persist-tun
@@ -101,7 +106,7 @@ Content-Length: `wc -c client.ovpn`
 
 `cat client.ovpn`
 EOF
-
+echo 1 > /proc/sys/net/ipv4/ip_forward
 iptables -t nat -A POSTROUTING -s 192.168.255.0/24 -o eth0 -j MASQUERADE
 
 touch tcp443.log udp1194.log http8080.log
